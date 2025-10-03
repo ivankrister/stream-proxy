@@ -1,6 +1,6 @@
-FROM alfg/nginx-rtmp:alpine
+FROM alfg/nginx-rtmp:latest
 
-# Install gettext for envsubst
+# Install gettext for envsubst (this image is based on Alpine)
 RUN apk add --no-cache gettext
 
 # Create necessary directories
