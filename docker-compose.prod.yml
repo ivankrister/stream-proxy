@@ -17,7 +17,6 @@ services:
       - WHEP_HOST_2=${WHEP_HOST_2:-area-2.quantumatic.live}
       - DOMAIN=${DOMAIN:-your-proxy-domain.com}
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - recordings:/var/recordings
       - logs:/var/log/nginx
       - certbot-etc:/etc/letsencrypt:ro
