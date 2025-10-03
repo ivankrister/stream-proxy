@@ -1,17 +1,17 @@
-FROM nginx:alpine
+FROM tiangolo/nginx-rtmp:latest
 
-# Install build dependencies and RTMP module
-RUN apk add --no-cache \
-    nginx-mod-rtmp \
-    && mkdir -p /var/log/nginx
+# This image already has nginx with RTMP module compiled and ready
+# Create necessary directories
+RUN mkdir -p /var/log/nginx \
+    && mkdir -p /var/recordings
 
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Create directory for RTMP recordings (optional)
-RUN mkdir -p /var/recordings
+# Set proper permissions
+RUN chown -R nginx:nginx /var/log/nginx /var/recordings 2>/dev/null || true
 
-# Expose RTMP port (1935) and HTTP port (80)
-EXPOSE 1935 80
+# Expose RTMP port (1935) and HTTP ports (80, 443)  
+EXPOSE 1935 80 443
 
 CMD ["nginx", "-g", "daemon off;"]

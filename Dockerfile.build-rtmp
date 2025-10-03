@@ -1,0 +1,48 @@
+FROM nginx:1.26-alpine as builder
+
+# Install build dependencies
+RUN apk add --no-cache \
+    git \
+    gcc \
+    g++ \
+    make \
+    linux-headers \
+    pcre-dev \
+    zlib-dev \
+    openssl-dev
+
+# Get nginx source (matching the installed version)
+WORKDIR /tmp
+RUN wget "http://nginx.org/download/nginx-1.26.2.tar.gz" \
+    && tar -xzf nginx-1.26.2.tar.gz
+
+# Clone RTMP module
+RUN git clone https://github.com/arut/nginx-rtmp-module.git
+
+# Build RTMP module
+WORKDIR /tmp/nginx-1.26.2
+RUN ./configure \
+    --with-compat \
+    --add-dynamic-module=../nginx-rtmp-module \
+    && make modules
+
+# Final stage
+FROM nginx:1.26-alpine
+
+# Copy the built module
+COPY --from=builder /tmp/nginx-1.26.2/objs/ngx_rtmp_module.so /usr/lib/nginx/modules/
+
+# Create necessary directories
+RUN mkdir -p /var/log/nginx \
+    && mkdir -p /var/recordings
+
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Set proper permissions
+RUN chown -R nginx:nginx /var/log/nginx /var/recordings 2>/dev/null || true
+
+# Expose RTMP port (1935) and HTTP ports (80, 443)
+EXPOSE 1935 80 443
+
+CMD ["nginx", "-g", "daemon off;"]

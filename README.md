@@ -54,6 +54,22 @@ This Docker setup creates an NGINX server with RTMP module that acts as a proxy 
    ./start.sh
    ```
 
+## Troubleshooting RTMP Module Issues
+
+If you encounter NGINX RTMP module version mismatch errors, use the switch script:
+
+### Option 1: Use pre-built image (recommended)
+```bash
+./switch-docker.sh tiangolo
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+### Option 2: Build RTMP module from source
+```bash
+./switch-docker.sh custom-build  
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
 ## Application Configuration
 
 The NGINX configuration supports multiple applications:
