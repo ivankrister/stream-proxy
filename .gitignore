@@ -1,0 +1,83 @@
+# Environment files
+.env
+
+# SSL/Certbot certificates and keys
+certbot/
+ssl-certs/
+*.pem
+*.key
+*.crt
+*.csr
+
+# Docker volumes and data
+recordings/
+logs/
+**/logs/
+web-root/
+
+# SSL renewal logs and scripts
+ssl-renewal.log
+renew-ssl.sh
+nginx-temp.conf
+
+# Docker compose overrides
+docker-compose.override.yml
+docker-compose.local.yml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+
+# Python (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Local development files
+.local/
+.cache/
+
+# Archive files
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# Configuration overrides
+nginx-local.conf
+docker-compose-local.yml
