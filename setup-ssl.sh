@@ -10,6 +10,11 @@ source .env
 
 echo "🔒 Setting up SSL certificates for domain: $DOMAIN"
 
+# Clean up any existing resources
+echo "🧹 Cleaning up existing Docker resources..."
+docker-compose down --remove-orphans 2>/dev/null || true
+docker network prune -f 2>/dev/null || true
+
 # Check if certificates already exist
 if [ -d "./certbot/etc/live/$DOMAIN" ]; then
     echo "✅ SSL certificates already exist for $DOMAIN"

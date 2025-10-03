@@ -26,8 +26,6 @@ services:
     restart: unless-stopped
     networks:
       - rtmp-network
-    depends_on:
-      - certbot
 
   certbot:
     image: certbot/certbot
@@ -38,22 +36,27 @@ services:
       - web-root:/var/www/html
     command: >-
       sh -c "
-        if [ ! -f /etc/letsencrypt/live/${DOMAIN}/fullchain.pem ]; then
+        echo 'Waiting for initial setup...'; 
+        sleep 10;
+        if [ ! -f /etc/letsencrypt/live/\${DOMAIN}/fullchain.pem ]; then
+          echo 'Generating SSL certificate for \${DOMAIN}';
           certbot certonly
             --webroot
             --webroot-path=/var/www/html
-            --email ${EMAIL}
+            --email \${EMAIL}
             --agree-tos
             --no-eff-email
             --force-renewal
-            -d ${DOMAIN}
+            -d \${DOMAIN}
         fi &&
-        trap exit TERM; while :; do certbot renew; sleep 720h & wait $${!}; done;"
+        echo 'Starting renewal daemon...';
+        trap exit TERM; while :; do certbot renew --quiet; sleep 720h & wait \$${!}; done;"
     environment:
       - DOMAIN=${DOMAIN:-your-proxy-domain.com}
       - EMAIL=${EMAIL:-your-email@example.com}
     networks:
       - rtmp-network
+    restart: unless-stopped
 
   # Optional: If you want to include your target RTMP server
   # Uncomment and configure as needed
