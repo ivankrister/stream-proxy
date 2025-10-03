@@ -11,18 +11,14 @@ RUN apt-get update && apt-get install -y gettext-base && rm -rf /var/lib/apt/lis
 # Copy custom nginx configuration as template
 COPY nginx.conf /etc/nginx/nginx.conf.template
 
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 # Set proper permissions
 RUN chown -R nginx:nginx /var/log/nginx /var/recordings 2>/dev/null || true
-
-# Create startup script
-RUN echo '#!/bin/bash\n\
-set -e\n\
-echo "Substituting environment variables in nginx configuration..."\n\
-envsubst "$(printf '\''${%s} '\'' $(env | cut -d= -f1))" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf\n\
-echo "Starting nginx..."\n\
-exec nginx -g "daemon off;"' > /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 
 # Expose RTMP port (1935) and HTTP ports (80, 443)  
 EXPOSE 1935 80 443
 
-CMD ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
