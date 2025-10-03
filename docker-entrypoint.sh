@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-echo "Starting NGINX RTMP Proxy..."
+echo "Starting NGINX RTMP Proxy (Alpine)..."
 echo "Environment variables:"
 echo "WHEP_SERVER_1=$WHEP_SERVER_1"
 echo "WHEP_HOST_1=$WHEP_HOST_1"
