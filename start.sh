@@ -16,7 +16,7 @@ if [ ! -d "./certbot/etc/live/$DOMAIN" ] && [ ! -f "/var/lib/docker/volumes/ngin
     ./setup-ssl.sh
 else
     echo "✅ SSL certificates found. Starting services..."
-    docker-compose up -d
+    docker compose up -d
 fi
 
 echo ""
@@ -30,4 +30,4 @@ echo "  Server 1: https://$DOMAIN/rtc1/v1/whep/?app=live&stream=livestream"
 echo "  Server 2: https://$DOMAIN/rtc2/v1/whep/?app=live&stream=livestream"
 echo ""
 echo "To view logs: docker-compose logs -f"
-echo "To stop: docker-compose down"
+echo "To stop: docker compose down"

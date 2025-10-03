@@ -74,7 +74,7 @@ EOF
 fi
 
 echo "🚀 Starting main services..."
-docker-compose up -d
+docker compose up -d
 
 echo "🔄 Setting up automatic renewal (every 30 days)..."
 
@@ -82,10 +82,10 @@ echo "🔄 Setting up automatic renewal (every 30 days)..."
 cat > renew-ssl.sh << 'EOF'
 #!/bin/bash
 echo "🔄 Checking SSL certificate renewal..."
-docker-compose exec certbot certbot renew --quiet
+docker compose exec certbot certbot renew --quiet
 if [ $? -eq 0 ]; then
     echo "✅ Certificate renewal check completed"
-    docker-compose exec nginx-rtmp nginx -s reload
+    docker compose exec nginx-rtmp nginx -s reload
     echo "🔄 NGINX reloaded"
 else
     echo "❌ Certificate renewal failed"
