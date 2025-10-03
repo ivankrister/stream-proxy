@@ -15,7 +15,12 @@ This Docker setup creates an NGINX server with RTMP module that acts as a proxy 
 
 ## Configuration
 
-1. Edit the `.env` file to set your configuration:
+1. **Copy the example environment file and edit it:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Edit the `.env` file to set your configuration:**
    ```bash
    # SSL/Domain Configuration
    DOMAIN=your-proxy-domain.com
@@ -34,7 +39,24 @@ This Docker setup creates an NGINX server with RTMP module that acts as a proxy 
 
    **Important**: Make sure your domain points to your server's public IP address before running the SSL setup.
 
-2. The NGINX configuration supports multiple applications:
+## Quick Start
+
+1. **Clone and setup:**
+   ```bash
+   git clone <your-repo-url>
+   cd nginx-stream
+   cp .env.example .env
+   # Edit .env with your values
+   ```
+
+2. **Run:**
+   ```bash
+   ./start.sh
+   ```
+
+## Application Configuration
+
+The NGINX configuration supports multiple applications:
    - `/live` - Allows both publishing and playback, forwards to **both** servers
    - `/proxy` - Only allows publishing, acts as pure proxy to **both** servers
    - `/server1` - Only publishes to ORYX_SERVER_1
