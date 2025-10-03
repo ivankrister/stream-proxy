@@ -69,29 +69,29 @@ The NGINX configuration supports multiple applications:
 ./start.sh
 ```
 
-### Manual SSL setup (if needed):
+### Manual SSL certificate generation:
 ```bash
-./setup-ssl.sh
+./generate-ssl.sh
 ```
 
 ### Start the service (regular use):
 ```bash
-docker-compose up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 ### Stop the service:
 ```bash
-docker-compose down
+docker compose -f docker-compose.prod.yml down
 ```
 
 ### View logs:
 ```bash
-docker-compose logs -f nginx-rtmp
+docker compose logs -f nginx-rtmp
 ```
 
 ### Rebuild after changes:
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ## RTMP URLs
@@ -236,18 +236,17 @@ async function startWhepPlayback2() {
 crontab -e
 
 # Add this line (runs on 1st of every month at midnight):
-0 0 1 * * /path/to/your/project/renew-ssl.sh >> /path/to/your/project/ssl-renewal.log 2>&1
+0 0 1 * * /full/path/to/your/project/renew-ssl.sh >> /full/path/to/your/project/ssl-renewal.log 2>&1
 ```
 
 ### Manual Renewal:
 ```bash
-docker-compose exec certbot certbot renew
-docker-compose exec nginx-rtmp nginx -s reload
+./renew-ssl.sh
 ```
 
 ### Check Certificate Status:
 ```bash
-docker-compose exec certbot certbot certificates
+docker run --rm -v nginx-stream_certbot-etc:/etc/letsencrypt certbot/certbot certificates
 ```
 
 ## Ports

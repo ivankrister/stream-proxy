@@ -34,23 +34,32 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - web-root:/var/www/html
-    command: >-
-      sh -c "
-        echo 'Waiting for initial setup...'; 
-        sleep 10;
-        if [ ! -f /etc/letsencrypt/live/\${DOMAIN}/fullchain.pem ]; then
-          echo 'Generating SSL certificate for \${DOMAIN}';
-          certbot certonly
-            --webroot
-            --webroot-path=/var/www/html
-            --email \${EMAIL}
-            --agree-tos
-            --no-eff-email
-            --force-renewal
-            -d \${DOMAIN}
-        fi &&
-        echo 'Starting renewal daemon...';
-        trap exit TERM; while :; do certbot renew --quiet; sleep 720h & wait \$${!}; done;"
+    entrypoint: "/bin/sh"
+    command: >
+      -c "
+      echo 'Waiting for nginx to start...';
+      sleep 15;
+      if [ ! -f /etc/letsencrypt/live/$${DOMAIN}/fullchain.pem ]; then
+        echo 'Generating SSL certificate for domain: '$${DOMAIN};
+        certbot certonly
+          --webroot
+          --webroot-path=/var/www/html
+          --email $${EMAIL}
+          --agree-tos
+          --no-eff-email
+          --non-interactive
+          -d $${DOMAIN};
+        echo 'SSL certificate generated successfully';
+      else
+        echo 'SSL certificate already exists for '$${DOMAIN};
+      fi;
+      echo 'Starting renewal daemon...';
+      while :; do
+        echo 'Checking for certificate renewal...';
+        certbot renew --quiet --webroot --webroot-path=/var/www/html;
+        echo 'Next renewal check in 12 hours...';
+        sleep 43200;
+      done"
     environment:
       - DOMAIN=${DOMAIN:-your-proxy-domain.com}
       - EMAIL=${EMAIL:-your-email@example.com}

@@ -8,7 +8,7 @@ echo "🔧 Fixing Docker networking issues..."
 
 # Stop all containers
 echo "🛑 Stopping all containers..."
-docker-compose down --remove-orphans 2>/dev/null || true
+docker compose down --remove-orphans 2>/dev/null || true
 
 # Clean up networks
 echo "🧹 Cleaning up Docker networks..."
@@ -20,18 +20,18 @@ docker container prune -f
 
 # Start services one by one
 echo "🚀 Starting nginx service first..."
-docker-compose up -d nginx-rtmp
+docker compose up -d nginx-rtmp
 
 # Wait a bit for nginx to start
 sleep 5
 
 echo "🔒 Starting certbot service..."
-docker-compose up -d certbot
+docker compose up -d certbot
 
 echo "✅ Services started successfully!"
 echo ""
 echo "📊 Check status:"
-echo "docker-compose ps"
+echo "docker compose ps"
 echo ""
 echo "📋 View logs:"
-echo "docker-compose logs -f"
+echo "docker compose logs -f"
