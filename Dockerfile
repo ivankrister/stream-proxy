@@ -3,10 +3,9 @@ FROM alfg/nginx-rtmp:latest
 # Install gettext for envsubst (this image is based on Alpine)
 RUN apk add --no-cache gettext
 
-# Create necessary directories
-RUN mkdir -p /var/log/nginx \
-    /var/recordings && \
-    chown -R nginx:nginx /var/log/nginx /var/recordings
+# Create necessary directories with proper permissions
+RUN mkdir -p /var/log/nginx /var/recordings && \
+    chmod 755 /var/log/nginx /var/recordings
 
 # Copy custom nginx configuration as template
 COPY nginx.conf /etc/nginx/nginx.conf.template
